@@ -7,7 +7,6 @@
 
 #ifndef BOARD_H_
 #define BOARD_H_
-
 class Board{
 public:
 	unsigned short dimension;
@@ -43,23 +42,38 @@ public:
 		bit_count = bit_count << 1; //Multiply by two.
 		return bit_count;
 	}
+	inline unsigned char* vectorSum(unsigned char* vector1, unsigned char* vector2){
+		unsigned char* vector3=new unsigned char[row_size];
+		for(int i=0;i<row_size;i++){
+			vector3[i]=vector1[i]+vector2[i];
+		}
+		return vector3;
+	}
+	inline unsigned char* vectorProd(char* vector1,unsigned short multer){
+		unsigned char* vector2=new unsigned char[row_size];
+		for(int i=0;i<row_size;i++){
+			vector2[i]=vector1[i]*multer;
+		}
+		return vector2;
+	}
 	unsigned char getPosition(unsigned char* vector, bool getSetBit=false){
-		//Returns 0x000000ab, where a is set bit, b is value bit.
+		//Returns 0b000000ab, where a is set bit, b is value bit.
 		//Assume vector has length dimension, values from 0 to row_size-1
 		unsigned int bit_count=get_bit_count(vector);
 		unsigned int byte_count=bit_count >> 2; //Truncate/integer divide by 4
-		unsigned char byte_offset=bit_count & 0x02; //Get byte_count % 4
-		if(getSetBit) return (board[byte_count] & (0x03 << byte_offset)); //Evil bitwise magic.
-		else return (board[byte_count] & (0x01 << byte_offset));
+		unsigned char byte_offset=bit_count & 0b11; //Get byte_count % 4
+		if(getSetBit) return ((board[byte_count] & (0b11 << byte_offset))>>byte_offset); //Evil bitwise magic.
+		else return ((board[byte_count] & (0b1 << byte_offset))>>byte_offset);
 	}
 	void setPosition(unsigned char* vector, unsigned char value){
 		//Value in the form of 0x0000000b, where b is value bit.
 		unsigned int bit_count=get_bit_count(vector);
 		unsigned int byte_count=bit_count >> 2;//Truncate/integer divide by 4
-		unsigned char byte_offset=bit_count & 0x02; //Get byte_count % 4
-		board[byte_count]=((board[byte_count]>>(byte_offset+0x02))<<(byte_offset+0x02))+((0x02+value)<<byte_offset)+((board[byte_count]<<(0x04-byte_count))>>(0x04-byte_count));
+		unsigned char byte_offset=bit_count & 0b11; //Get byte_count % 4
+		board[byte_count]=((board[byte_count]>>(byte_offset+0b10))<<(byte_offset+0b10))+((0b10+value)<<byte_offset)+((board[byte_count]<<(0b100-byte_count))>>(0b100-byte_count));
 		//Horrifying byte shifting above to set the two bits at the byte_offset;
 	}
+	bool checkRow(unsigned char* vector,char* offsets);
 };
 
 
