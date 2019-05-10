@@ -1,0 +1,22 @@
+General notation:
+m_n denotes an m-dimensional tic-tac-toe game, whose rows are all of length n.
+The goal of this project is to be able to check if a given tic-tac-toe board has a winning line
+(that is to say, a line of constant offset and length n whose values are all O or X), 
+and more generally, if a game of m_n is possible to stalemate. 
+(That is to say, have no lines consisting of only Os  or Xs)
+
+Board Variables:
+Dimension->m
+Row_size->n
+Byte_count-> The size of the board in bytes, which could be potentially useful.
+Dimension_cache-> An array of size  row_size that contains the bit offsets used for each row.
+Board-> The pointer to the start of the board data.
+
+
+Data storage:
+
+Board is composed of array of char characters. 
+Each position on the board uses two bits of data. 
+Bit 1 signifies whether the position has been set yet. (0->unset)
+Bit 2 signifies O or X, with 0 corresponding to O.
+All data is initialized to 0 at the start, so it is safe to assume that positions will be 00 until modified.
