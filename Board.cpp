@@ -27,3 +27,31 @@ for(unsigned char i=0;i<row_size;i++){
 }
 return false;
 }
+void Board::print3D(){
+	std::cout << "--------------------" << std::endl;
+	assert(dimension==3);
+	for(int i=0;i<row_size;i++){
+		for(int j=0;j<row_size;j++){
+			for(int k=0;k<row_size;k++){
+				unsigned char vector[3]={i,j,k};
+				std::cout << (int) getPosition(vector) << " ";
+			}
+			std::cout << std::endl;
+		}
+		std::cout << "--------------------" << std::endl;
+	}
+}
+unsigned char Board::safeGetPosition(unsigned char* vector, bool getSetBit){
+	//Safe getPosition. (It's impossible to access non-existent position)
+	for(int i=0;i<dimension;i++){
+		assert(vector[i]<row_size && vector[i]>=0);
+	}
+	return getPosition(vector,getSetBit);
+}
+void Board::safeSetPosition(unsigned char* vector, unsigned char value){
+	for(int i=0;i<dimension;i++){
+		assert(vector[i]<row_size && vector[i]>=0);
+	}
+	assert(value==0 || value==1);
+	setPosition(vector,value);
+}

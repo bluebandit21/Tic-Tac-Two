@@ -49,7 +49,7 @@ public:
 		}
 		return vector3;
 	}
-	inline unsigned char* vectorProd(char* vector1,unsigned short multer){
+	inline unsigned char* vectorProd(char* vector1,unsigned char multer){
 		unsigned char* vector2=new unsigned char[row_size];
 		for(int i=0;i<row_size;i++){
 			vector2[i]=vector1[i]*multer;
@@ -66,7 +66,7 @@ public:
 		else return ((board[byte_count] & (0b1 << byte_offset))>>byte_offset);
 	}
 	void setPosition(unsigned char* vector, unsigned char value){
-		//Value in the form of 0x0000000b, where b is value bit.
+		//Value in the form of 0b0000000b, where b is value bit.
 		unsigned int bit_count=get_bit_count(vector);
 		unsigned int byte_count=bit_count >> 2;//Truncate/integer divide by 4
 		unsigned char byte_offset=bit_count & 0b11; //Get byte_count % 4
@@ -74,6 +74,9 @@ public:
 		//Horrifying byte shifting above to set the two bits at the byte_offset;
 	}
 	bool checkRow(unsigned char* vector,char* offsets);
+	void print3D();
+	void safeSetPosition(unsigned char* vector, unsigned char value);
+	unsigned char safeGetPosition(unsigned char* vector, bool getSetBit=false);
 };
 
 
